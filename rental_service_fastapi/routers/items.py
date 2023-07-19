@@ -33,13 +33,13 @@ async def create_item(
 ):
     db_unit = crud.get_unit_by_name(db, unit_name)
     if not db_unit:
-        raise HTTPException(status_code=400, detail="No such unit")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No such unit")
     db_type = crud.get_type_by_name(db, type_name)
     if not db_type:
-        raise HTTPException(status_code=400, detail="No such type")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No such type")
     db_location = crud.get_location_by_postal_code(db, location_postal_code)
     if not db_location:
-        raise HTTPException(status_code=400, detail="No such location")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No such location")
     return crud.create_item(db, item, db_unit, db_type, current_user, db_location)
 
 @router.patch("/availability/{item_id}/")

@@ -20,7 +20,7 @@ router = APIRouter(
 def create_type(type: schemas.ItemTypeBase, db: Session = Depends(get_db)):
     db_type = crud.get_type_by_name(db, type.type_name)
     if db_type:
-        raise HTTPException(status_code=400, detail="Type already exists")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Type already exists")
     return crud.create_type(db, type)
 
 @router.post(
@@ -31,5 +31,5 @@ def create_type(type: schemas.ItemTypeBase, db: Session = Depends(get_db)):
 def create_unit(unit: schemas.UnitBase, db: Session = Depends(get_db)):
     db_unit = crud.get_unit_by_name(db, unit.unit_name)
     if db_unit:
-        raise HTTPException(status_code=400, detail="Unit already exists")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Unit already exists")
     return crud.create_unit(db, unit)

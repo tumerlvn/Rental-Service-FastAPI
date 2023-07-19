@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, Form, Body
+from fastapi import APIRouter, Depends, HTTPException, Request, Form, Body, status
 from typing import Annotated
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -42,7 +42,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     """
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
-        raise HTTPException(status_code=400, detail="User already registered")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already registered")
     return crud.create_user(db=db, user=user)
 
 @router.post("/register/", response_model=schemas.User)
@@ -61,10 +61,10 @@ async def register_user(
         try:
             crud.create_user(db, user)
         except IntegrityError:
-            raise HTTPException(status_code=400, detail="Duplicate username or email")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Duplicate username or email")
         return crud.get_user_by_email(db, user.email)
     else:
-        raise HTTPException(status_code=400, detail=form.errors)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=form.errors)
 
 @router.delete(
     "/",
